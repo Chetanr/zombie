@@ -1,0 +1,35 @@
+.card {
+  align-items: center;
+  width: 260px;
+  left: 600px;
+}
+
+.level_one_icon {
+  top: 200px;
+  left: 450px;
+  position: relative;
+}
+
+.level_two_icon {
+  top: 200px;
+  left: 550px;
+  position: relative;
+}
+
+.level_three_icon {
+  top: 200px;
+  left: 650px;
+  position: relative;
+}
+
+.level_four_icon {
+  top: 200px;
+  left: 750px;
+  position: relative;
+}
+
+.level_five_icon {
+  top: 200px;
+  left: 850px;
+  position: relative;
+}
