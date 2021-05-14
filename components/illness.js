@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { StyleSheet, ScrollView, SafeAreaView } from "react-native";
-import { Card, Title, DefaultTheme, Appbar } from "react-native-paper";
+import { StyleSheet, ScrollView, SafeAreaView, Text } from "react-native";
+import { Card, Title, DefaultTheme } from "react-native-paper";
+import deviceStorage from "../services/deviceStorage";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import "react-native-gesture-handler";
 
@@ -26,15 +27,14 @@ const Illness = ({ navigation }) => {
     getIllness();
   }, []);
 
-  const checkSeverity = (ilness) => {
-    console.log("hi", ilness);
+  const checkSeverity = async (ilness) => {
+    let illnessStorage = await deviceStorage.saveItem("illness", ilness);
+    await console.log("hi", illnessStorage);
   };
 
   return (
     <SafeAreaView theme={theme} style={styles.viewStyle}>
-      <Appbar.Header>
-        <Appbar.Content title="Select an illness:" />
-      </Appbar.Header>
+      <Text style={styles.textStyle}>Select an illness:</Text>
       <ScrollView>
         {illnesses.map((illness) => {
           return (
@@ -47,13 +47,8 @@ const Illness = ({ navigation }) => {
             >
               <Card.Content>
                 <Title>
-                  {illness}{" "}
-                  <Icon
-                    name="arrow-right"
-                    size={30}
-                    color="#FF0000"
-                    style={styles.iconStyle}
-                  />
+                  {illness}
+                  <Icon name="arrow-right" size={30} color="#FF0000" />
                 </Title>
               </Card.Content>
             </Card>
@@ -75,19 +70,23 @@ const theme = {
 };
 
 const styles = StyleSheet.create({
+  viewStyle: {
+    alignItems: "center",
+    backgroundColor: "#CBC3E3",
+  },
   cardStyle: {
     fontSize: 10,
     alignItems: "center",
     borderWidth: 1,
-    marginLeft: 70,
-    marginTop: 20,
+    marginTop: 10,
     borderColor: "grey",
-    borderRadius: 50,
+    borderRadius: 20,
     width: 300,
   },
-  iconStyle: {
-    alignItems: "flex-end",
-    marginLeft: 20,
+  textStyle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
 

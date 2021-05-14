@@ -1,54 +1,74 @@
 import React from "react";
-import { StyleSheet, SafeAreaView, View } from "react-native";
+import { StyleSheet, SafeAreaView, View, Text } from "react-native";
 import { DefaultTheme, Appbar } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import "react-native-gesture-handler";
+import deviceStorage from "../services/deviceStorage";
 
-function Severity({ navigation, route }) {
-  const suggestHospitals = (severity) => {
-    // sessionStorage.setItem("severity", severity);
-    // ReactDOM.render(<Hospital />, document.getElementById("root"));
+const Severity = ({ navigation }) => {
+  const suggestHospitals = async (severity) => {
+    let severityStorage = await deviceStorage.saveItem("severity", severity);
+    await console.log("hi", severityStorage);
   };
 
   return (
     <SafeAreaView theme={theme}>
-      <Appbar.Header>
-        <Appbar.Content title="Emergency Booking" subtitle="Select severity:" />
-      </Appbar.Header>
+      <Text style={styles.textStyle}>Select severity:</Text>
       <View style={styles.iconView}>
         <Icon
           name="sentiment-very-satisfied"
           size={60}
           color="#006300"
           style={styles.iconStyle}
+          onPress={() => {
+            suggestHospitals("0");
+            navigation.navigate("Hospital");
+          }}
         />
         <Icon
           name="sentiment-satisfied-alt"
           size={60}
           color="#ADFF2F"
           style={styles.iconStyle}
+          onPress={() => {
+            suggestHospitals("0");
+            navigation.navigate("Hospital");
+          }}
         />
         <Icon
           name="sentiment-satisfied"
           size={60}
           color="#CCCC00"
           style={styles.iconStyle}
+          onPress={() => {
+            suggestHospitals("0");
+            navigation.navigate("Hospital");
+          }}
         />
         <Icon
           name="sentiment-dissatisfied"
           size={60}
           color="#FF8C00"
           style={styles.iconStyle}
+          onPress={() => {
+            suggestHospitals("0");
+            navigation.navigate("Hospital");
+          }}
         />
         <Icon
           name="sentiment-very-dissatisfied"
           size={60}
           color="#FF0000"
           style={styles.iconStyle}
+          onPress={() => {
+            suggestHospitals("0");
+            navigation.navigate("Hospital");
+          }}
         />
       </View>
     </SafeAreaView>
   );
-}
+};
 
 const theme = {
   ...DefaultTheme,
@@ -68,9 +88,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   iconView: {
-    paddingTop: 70,
+    paddingTop: 40,
     marginHorizontal: 50,
     alignItems: "center",
+  },
+  textStyle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    paddingTop: 20,
   },
 });
 
