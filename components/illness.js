@@ -1,26 +1,24 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { StyleSheet, ScrollView, SafeAreaView, Text } from "react-native";
 import { Card, Title, DefaultTheme } from "react-native-paper";
 import deviceStorage from "../services/deviceStorage";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import "react-native-gesture-handler";
+import { apiConnect } from "../services/apiService";
 
 const Illness = ({ navigation }) => {
   const [illnesses, setIllnesses] = useState([]);
 
   const getIllness = async () => {
     let illness = new Array();
-    await axios
-      .get("http://dmmw-api.australiaeast.cloudapp.azure.com:8080/illnesses")
-      .then((res) => {
-        res.data._embedded.illnesses.map((postData) => {
-          illness.push(postData.illness.name);
-        });
-      })
-      .then(() => {
-        setIllnesses(illness);
+    let response = await apiConnect("get", "/illnesses", null);
+
+    if (response && response.data) {
+      response.data._embedded.illnesses.map((postData) => {
+        illness.push(postData.illness.name);
       });
+    }
+    setIllnesses(illness);
   };
 
   useEffect(() => {
@@ -28,8 +26,7 @@ const Illness = ({ navigation }) => {
   }, []);
 
   const checkSeverity = async (ilness) => {
-    let illnessStorage = await deviceStorage.saveItem("illness", ilness);
-    await console.log("hi", illnessStorage);
+    await deviceStorage.saveItem("illness", ilness);
   };
 
   return (

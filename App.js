@@ -13,36 +13,9 @@ export default function App() {
   return (
     <NavigationContainer theme={theme}>
       <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={Illness}
-          options={
-            {
-              // title: "Illness",
-              // headerShown: false,
-            }
-          }
-        />
-        <Stack.Screen
-          name="Severity"
-          component={Severity}
-          options={
-            {
-              // title: "Illness",
-              // headerShown: false,
-            }
-          }
-        />
-        <Stack.Screen
-          name="Hospital"
-          component={Hospital}
-          options={
-            {
-              // title: "Illness",
-              // headerShown: false,
-            }
-          }
-        />
+        <Stack.Screen name="Home" component={Illness} />
+        <Stack.Screen name="Severity" component={Severity} />
+        <Stack.Screen name="Hospital" component={Hospital} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -54,6 +27,5 @@ const theme = {
   colors: {
     ...DefaultTheme.colors,
     primary: "#3498db",
-    // accent: "#f1c40f",
   },
 };

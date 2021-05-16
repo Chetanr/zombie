@@ -1,14 +1,13 @@
 import React from "react";
 import { StyleSheet, SafeAreaView, View, Text } from "react-native";
-import { DefaultTheme, Appbar } from "react-native-paper";
+import { DefaultTheme } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import "react-native-gesture-handler";
 import deviceStorage from "../services/deviceStorage";
 
 const Severity = ({ navigation }) => {
   const suggestHospitals = async (severity) => {
-    let severityStorage = await deviceStorage.saveItem("severity", severity);
-    await console.log("hi", severityStorage);
+    await deviceStorage.saveItem("severity", severity);
   };
 
   return (
@@ -31,7 +30,7 @@ const Severity = ({ navigation }) => {
           color="#ADFF2F"
           style={styles.iconStyle}
           onPress={() => {
-            suggestHospitals("0");
+            suggestHospitals("1");
             navigation.navigate("Hospital");
           }}
         />
@@ -41,7 +40,7 @@ const Severity = ({ navigation }) => {
           color="#CCCC00"
           style={styles.iconStyle}
           onPress={() => {
-            suggestHospitals("0");
+            suggestHospitals("2");
             navigation.navigate("Hospital");
           }}
         />
@@ -51,7 +50,7 @@ const Severity = ({ navigation }) => {
           color="#FF8C00"
           style={styles.iconStyle}
           onPress={() => {
-            suggestHospitals("0");
+            suggestHospitals("3");
             navigation.navigate("Hospital");
           }}
         />
@@ -61,7 +60,7 @@ const Severity = ({ navigation }) => {
           color="#FF0000"
           style={styles.iconStyle}
           onPress={() => {
-            suggestHospitals("0");
+            suggestHospitals("4");
             navigation.navigate("Hospital");
           }}
         />

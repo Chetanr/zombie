@@ -1,76 +1,79 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { render } from "react-dom";
 import { StyleSheet, ScrollView, SafeAreaView, Text } from "react-native";
 import "react-native-gesture-handler";
 import deviceStorage from "../services/deviceStorage";
+import { apiConnect } from "../services/apiService";
 import { Card, Title, DefaultTheme } from "react-native-paper";
 
 const Hospital = ({ navigation }) => {
-  const [hospitals, setHospitals] = useState(new Map());
+  const [hospitals, setHospitals] = useState([]);
   const [severity, setSeverity] = useState("");
   const [illness, setIllness] = useState("");
-  const [waitingList, setWaitingList] = useState("");
+  const [waitingList, setWaitingList] = useState([]);
+  const [displayData, setDisplayData] = useState(new Map());
 
   const getHospitals = async () => {
-    let hospital = new Map();
+    let hospital = new Array();
     let waitingListData = new Array();
-    await axios
-      .get("http://dmmw-api.australiaeast.cloudapp.azure.com:8080/hospitals")
-      .then((res) => {
-        res.data._embedded.hospitals.map((postData) => {
-          hospital.set(postData.name, postData.waitingList);
-        });
-      })
-      .then(() => {
-        setHospitals(hospital);
-        // setWaitingList(waitingListData);
-      })
-      .then(async () => {
-        let illnessStored = await deviceStorage.retrieveData("illness");
-        let severityStored = await deviceStorage.retrieveData("severity");
-        // console.log(severityStored);
-        setIllness(illnessStored);
-        setSeverity(severityStored);
-        // console.log("illness variable", illnessStored);
-        // console.log("severity stored", severityStored);
+    let response = await apiConnect("get", "/hospitals", null);
+
+    if (response && response.data) {
+      response.data._embedded.hospitals.map((postData) => {
+        hospital.push(postData.name);
+        waitingListData.push(postData.waitingList);
       });
+    }
+
+    setHospitals(hospital);
+    setWaitingList(waitingListData);
   };
 
-  // const getStoredDetails = async () => {
-  // };
+  const getStoredData = async () => {
+    let illnessStored = await deviceStorage.retrieveData("illness");
+    let severityStored = await deviceStorage.retrieveData("severity");
+    setIllness(illnessStored);
+    setSeverity(severityStored);
+  };
+
+  const calculateWaitingTimes = () => {
+    let hospital = "";
+    let i = 0;
+    waitingList.map((list) => {
+      list.map((data) => {
+        if (data.levelOfPain == severity) {
+          let time = data.patientCount * data.averageProcessTime;
+          hospital = hospitals[i];
+          displayData.set(hospital, time);
+        }
+      });
+      i++;
+    });
+  };
 
   useEffect(() => {
     getHospitals();
+    getStoredData();
   }, []);
-
-  const renderHospitalData = () => {};
 
   return (
     <SafeAreaView theme={theme} style={styles.viewStyle}>
       <Text style={styles.textStyle}>Our Suggested Hospitals:</Text>
       <ScrollView>
-        {[hospitals].map((hospital) => {
+        {calculateWaitingTimes()}
+        {[...displayData].sort().map((data) => {
           return (
-            <Card
-              onPress={() => {
-                // checkSeverity(illness);
-                // navigation.navigate("Severity");
-              }}
-              style={styles.cardStyle}
-            >
+            <Card style={styles.cardStyle}>
               <Card.Content>
-                <Title>
-                  {hospital.name}
-                  {/* <Icon name="arrow-right" size={30} color="#FF0000" /> */}
-                </Title>
+                <Title style={styles.hospitalTextStyle}>{data[0]}</Title>
+                <Text style={styles.waitingTimeTextStyle}>
+                  Waiting Time: {data[1]}
+                </Text>
               </Card.Content>
             </Card>
           );
         })}
       </ScrollView>
     </SafeAreaView>
-    // <Text>{severity}</Text>
   );
 };
 
@@ -102,6 +105,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
+  },
+  hospitalTextStyle: {
+    fontSize: 15,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  waitingTimeTextStyle: {
+    fontSize: 10,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "#F44336",
   },
 });
 
