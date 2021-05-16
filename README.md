@@ -1,6 +1,6 @@
 # Zombie
 
-The project has been implemented using react native. There are 3 components
+The project is a simple cross-platform application that has been implemented using react native. There are 3 components
 
 1. **illness.js** - This file addresses the code relating to the illness screen where the user will be prompted to choose an illness that is populated from the API (http://dmmw-api.australiaeast.cloudapp.azure.com:8080/illnesses).
 
