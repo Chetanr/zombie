@@ -46,6 +46,7 @@ const Hospital = ({ navigation }) => {
           displayData.set(hospital, time);
         }
       });
+      console.log(displayData);
       i++;
     });
   };
@@ -60,18 +61,22 @@ const Hospital = ({ navigation }) => {
       <Text style={styles.textStyle}>Our Suggested Hospitals:</Text>
       <ScrollView>
         {calculateWaitingTimes()}
-        {[...displayData].sort().map((data) => {
-          return (
-            <Card style={styles.cardStyle}>
-              <Card.Content>
-                <Title style={styles.hospitalTextStyle}>{data[0]}</Title>
-                <Text style={styles.waitingTimeTextStyle}>
-                  Waiting Time: {data[1]}
-                </Text>
-              </Card.Content>
-            </Card>
-          );
-        })}
+        {[...displayData]
+          .sort(function (a, b) {
+            return a[1] - b[1];
+          })
+          .map((data) => {
+            return (
+              <Card style={styles.cardStyle}>
+                <Card.Content>
+                  <Title style={styles.hospitalTextStyle}>{data[0]}</Title>
+                  <Text style={styles.waitingTimeTextStyle}>
+                    Waiting Time: {data[1]}
+                  </Text>
+                </Card.Content>
+              </Card>
+            );
+          })}
       </ScrollView>
     </SafeAreaView>
   );
